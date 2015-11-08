@@ -8,9 +8,9 @@ block content
 					| This is the map
 		div.medium-4.columns.no-padding
 			div.listing-title
-				h4 Listings in 
-					span(ng-bind='vm.getParam()')
-				nav.top-bar(data-topbar,role="navigation")
+				h4 Properties in 
+					span(ng-bind="vm.getParamValue('location')")
+				nav.top-bar.nav-sidebar(data-topbar,role="navigation")
 					section.top-bar-section
 						ul.left
 							li 
@@ -19,22 +19,24 @@ block content
 								a(ng-click="vm.order('-listDate')") Fire
 							li 
 								a(ng-click="vm.order('price')") Cheap
-			ul#listings
+			ul.no-padding.no-margin#listings
 				li(ng-repeat="listing in vm.listings | orderBy:vm.predicate" )
 					div.row(ng-click='vm.alertMessage(listing.id)')
 						div.small-4.columns
 							a.th(data-reveal-id="myModal")
 								img(ng-src='{{listing.media[0].url}}')
-						div.small-8.columns
+						div.small-8.columns.no-padding
 							p(ng-bind='listing.address')
-							p
+							p.roi-price
+								| ROI:&nbsp;
 								//- ROI = (rent - monthly taxes) * 12 / purchase price + capex
 								//- capex = ((-.25 * year built) + 530) * sq ft)
 								//- span(ng-bind='vm.calculateRent(listing,listing.city,listing.state, listing.address)')
-								span(ng-bind='vm.calculateROI(listing,listing.taxAnnual,listing.price,listing.yearBuilt,listing.squareFootage,listing.estimatedRent)')
+								span.roi-thumb(ng-bind='vm.calculateROI(listing,listing.taxAnnual,listing.price,listing.yearBuilt,listing.squareFootage,listing.estimatedRent)')
+								| %
 								| &nbsp;|&nbsp;
 								span(ng-bind='listing.price | currency')
-							p
+							p.bed-bath.smaller-details
 								| Bed:
 								span(ng-bind='listing.bedrooms')
 								| &nbsp;Bath:
@@ -43,36 +45,53 @@ block content
 								span(ng-bind='listing.yearBuilt')
 								| &nbsp;Sq Ft:
 								span(ng-bind='listing.squareFootage')
-							p
+							p.list-date-market.smaller-details
 								| List Date:
 								span(ng-bind='vm.readableDate(listing.listDate)')
 								| &nbsp;|&nbsp;
 								span(ng-bind='vm.daysFromListing(listing.listDate)')
 								| &nbsp;Days on Market
 
-	div#myModal.reveal-modal(data-reveal,aria-labelledby="modalTitle",aria-hidden="true",role="dialog")
-		h4#modalTitle(ng-bind='vm.propertyListing.address')
+	div#myModal.no-padding.reveal-modal(data-reveal,aria-labelledby="modalTitle",aria-hidden="true",role="dialog")
+		h4.modalTitle.no-margin(ng-bind='vm.propertyListing.address')
 		div.row
-			div.small-7.columns 
+			div.medium-7.columns.no-padding
 				ul(data-orbit)
 					li(ng-repeat='pic in vm.propertyListing.media')
 						img(ng-src='{{pic.url}}')
-			div.small-5.columns
-				h5 ROI: 
-					span(ng-bind='vm.propertyListing.ROI')
-				label Price
-					input(type='text',ng-bind='{{vm.alteredPrice}}',ng-model='vm.alteredPrice',ng-change='vm.recalculateROI()')
-				label Rent
-					input(type='text',value='4000',ng-model='vm.propertyListing.estimatedRent',ng-change='vm.recalculateROI()')
-				label Renovation
-					input(type='text',ng-bind='{{vm.alteredCapEx}}',ng-model='vm.alteredCapEx',ng-change='vm.recalculateROI()')
-				p Bedrooms: 
+			div.medium-5.columns.collapse
+				h3.text-center.roi-edit ROI: 
+					span.roi-modal(ng-bind='vm.propertyListing.ROI')
+					| %
+				div.row.collapse.prefix-radius
+					div.small-3.columns
+						label.modal-label Price:
+					div.small-1.columns
+						span.prefix $
+					div.small-8.columns
+						input.no-margin(type='text',ng-bind='{{vm.alteredPrice}}',ng-model='vm.alteredPrice',ng-change='vm.recalculateROI()')
+				div.row.collapse.prefix-radius
+					div.small-3.columns
+						label.modal-label Rent:
+					div.small-1.columns
+						span.prefix $
+					div.small-8.columns
+						input.no-margin(type='text',value='4000',ng-model='vm.propertyListing.estimatedRent',ng-change='vm.recalculateROI()')
+				div.row.collapse.prefix-radius
+					div.small-3.columns
+						label.modal-label Reno:
+					div.small-1.columns
+						span.prefix $
+					div.small-8.columns
+						input.no-margin(type='text',ng-bind='{{vm.alteredCapEx}}',ng-model='vm.alteredCapEx',ng-change='vm.recalculateROI()')
+				p.bed-bath.smaller-details
+					| Bed:
 					span(ng-bind='vm.propertyListing.bedrooms')
-				p Bathrooms: 
+					| &nbsp;|&nbsp;Bath:
 					span(ng-bind='vm.propertyListing.baths')
-				p Year Built
+					| &nbsp;|&nbsp;Year Built:
 					span(ng-bind='vm.propertyListing.yearBuilt')
-				p Sq Ft:
+					| &nbsp;|&nbsp;Sq Ft:
 					span(ng-bind='vm.propertyListing.squareFootage')
 				button.button.agent-button(ng-click='vm.callAgent()') Call Agent
 			a.close-reveal-modal(aria-label="Close") &#215;

@@ -1,7 +1,11 @@
-body {
+body, input, h4, a, li, ul, nav {
+  font-family: 'Lora', serif;
+}
+
+.wrapper {
   background-image: url('/images/background.jpg');
   background-position: center center;
-  font-family: 'Lora', serif;
+  height:100%;
 }
 
 .logo {
@@ -30,7 +34,7 @@ body {
 }
 
 .search-bar {
-	margin-top: 170px;
+	padding-top: 170px;
 }
 
 .search-form {
@@ -41,6 +45,30 @@ body {
 	overflow: scroll;
 }
 
+#listings p {
+	margin: 0px;
+}
+
+#listings li {
+	border-bottom: 1px solid #d5d5d5;
+  padding: 10px;
+  line-height: 18px;
+  list-style: none;
+  cursor: pointer;
+}
+
+#listings li:hover{
+	background: #d5d5d5;
+}
+
+#listings .roi-price {
+	font-size:14px;
+}
+
+.roi-thumb {
+	font-weight: bold;
+}
+
 .full-width {
 	max-width: 100%;
 }
@@ -49,6 +77,76 @@ body {
 	padding: 0;
 }
 
+.no-margin {
+	margin: 0;
+}
+
 .listing-thumb {
 	width: 110px;
+}
+
+
+.listing-title h4 {
+	   margin: 0;
+    padding-left: 18px;
+    padding-top: 6px;
+    background: #d5d5d5;
+    padding-bottom: 6px;
+}
+
+.list-date-market {
+	color: #a2a2a2;
+}
+
+.smaller-details {
+	font-size: 12px;
+}
+
+.top-bar-section li:not(.has-form) a:not(.button), .nav-sidebar{
+	background-color: white;
+	border-bottom: 1px solid #074e68;
+	height:44px;
+
+}
+
+.nav-sidebar{
+	border-bottom: 1px solid #074e68;
+}
+
+.top-bar-section li:not(.has-form) a:not(.button):hover {
+	background-color: #074e68;
+}
+
+.top-bar-section li:not(.has-form) a:not(.button) {
+	color: #074e68;
+}
+
+.modalTitle {
+	padding: 3px 0 3px 5px;
+  background: #074e68;
+  color: white;
+}
+
+.reveal-modal .close-reveal-modal {
+    top: -1px;
+    right: 10px;
+    color:white;
+}
+
+.modal-label {
+	margin-top: 6px;
+}
+
+.roi-modal {
+	font-weight: bold;
+}
+
+.roi-edit {
+	border-bottom: 1px solid #d5d5d5
+}
+
+.orbit-bullets-container {
+	    position: absolute;
+    bottom: -17px;
+    right: 11px;
 }
