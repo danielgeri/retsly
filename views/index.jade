@@ -1,14 +1,18 @@
 extends layout
 
 block content
-	div.row
-		div.small-12.columns.text-center
-			span= title
-	form(method="GET",action="/search")
+	div.row.search-bar
+		div.small-2.columns &nbsp;
+		div.small-8.columns.no-padding
+			span.hero Investly
+			br
+			span.sidekick Real Estate Investing Made Easy.
+		div.small-2.columns  &nbsp;
+	form.search-form(method="GET",action="/search")
 		div.row
 			div.small-2.columns &nbsp;
-			div.small-6.columns
+			div.small-6.columns.no-padding
 				input(type="text",name='location',placeholder="Enter a Zip Code")
-			div.small-2.columns
+			div.small-2.columns.no-padding
 				input.button.postfix(type="submit",value="Search")
 			div.small-2.columns  &nbsp;

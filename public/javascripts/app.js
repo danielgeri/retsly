@@ -19,6 +19,7 @@
 		vm.predicate = '-ROI';
 		vm.propertyListing = '';
 		vm.propertyROI = '';
+		vm.alteredPrice = '';
 		//individual listing data
 
 		// $locationProvider.html5mode(true);
@@ -128,27 +129,20 @@
 			});
 		}
 
-		vm.calculateROI = function(listing, tax, listingPrice, yearBuilt, sqFt, rent) {
+		vm.calculateROI = function(listing, tax, listingPrice, capEx, rent) {
 			// var rent = vm.calculateRent(city, state, address);
-			var capEx = vm.calculateCapEx(yearBuilt,sqFt);
 			var NOI = (rent * 12) + tax;
 			var homeCost = listingPrice + capEx;
 			var returnOnI = NOI / homeCost;
-			return listing.ROI = (Math.ceil(returnOnI * 100) / 100);
+			if(listing != null) {
+				listing.ROI = (Math.ceil(returnOnI * 100) / 100);
+			}
+			return (Math.ceil(returnOnI * 100) / 100);
 		}
 
 		vm.calculateCapEx = function(yearBuilt,sqFt) {
 			var capEx = ((-.25 * yearBuilt) + 500) * sqFt;
 			return capEx;
-		}
-
-		vm.calculateROI2 = function(tax, price, yearBuilt, sqFt, rent) {
-			// var rent = vm.calculateRent(city, state, address);
-			var capEx = ((-.25 * yearBuilt) + 530) * sqFt;
-			var NOI = (rent * 12) + tax;
-			var homeCost = price + capEx;
-			var returnOnI = (Math.ceil((NOI / homeCost) * 100) / 100);
-			return returnOnI;
 		}
 
 		vm.calculateRent = function(listing, city, state, address) {
@@ -165,7 +159,7 @@
 		}
 
 		vm.alertMessage = function(listingIdd) {
-			var listingUrl = 'https://rets.io/api/v1/test_sf/listings/'+listingIdd+'?access_token=886502f6937e0c9db3349beb08f110e3'
+			var listingUrl = 'https://rets.io/api/v1/test_sf/listings/'+listingIdd+'?access_token=a7a8875b6cfaabeb96bfeea160f083ff'
 			$http({
 				method: 'GET',
 				url: listingUrl
@@ -174,13 +168,15 @@
 				console.log(vm.propertyListing.squareFootage);
 				vm.propertyListing.estimatedRent = 4000;
 				vm.propertyListing.capEx = vm.calculateCapEx(vm.propertyListing.yearBuilt,vm.propertyListing.squareFootage)
-				vm.propertyListing.ROI = vm.calculateROI2(
+				vm.propertyListing.ROI = vm.calculateROI(
+					null,
 					vm.propertyListing.taxAnnual,
 					vm.propertyListing.price,
-					vm.propertyListing.yearBuilt,
-					vm.propertyListing.squareFootage,
+					vm.propertyListing.capEx,
 					vm.propertyListing.estimatedRent
 				);
+				vm.alteredPrice = vm.propertyListing.price;
+				vm.alteredCapEx = vm.propertyListing.capEx;
 				$('#myModal').foundation('reveal', 'open');
 				$timeout(function() {
 		      $(document).foundation('orbit', 'reflow');
@@ -192,11 +188,11 @@
 		}
 
 		vm.recalculateROI = function() {
-			vm.propertyListing.ROI = vm.calculateROI2(
+			vm.propertyListing.ROI = vm.calculateROI(
+				null,
 				vm.propertyListing.taxAnnual,
-				vm.propertyListing.price,
-				vm.propertyListing.yearBuilt,
-				vm.propertyListing.squareFootage,
+				parseFloat(vm.alteredPrice),
+				parseFloat(vm.alteredCapEx),
 				vm.propertyListing.estimatedRent
 			);
 		}

@@ -1,3 +1,42 @@
+body {
+  background-image: url('/images/background.jpg');
+  background-position: center center;
+  font-family: 'Lora', serif;
+}
+
+.logo {
+	background-image: url('/images/logo.png');
+	background-position: center center;
+	background-size: 40px 40px;
+	background-repeat: no-repeat;
+	width: 40px;
+  height: 43px;
+}
+
+.hero {
+	font-size: 54px;
+    color: white;
+    background-color: black;
+    padding: 3px;
+}
+
+.sidekick {
+	font-size: 28px;
+    /* font-size: 54px; */
+  color: white;
+  background-color: black;
+  padding: 3px;
+  line-height: 29px;
+}
+
+.search-bar {
+	margin-top: 170px;
+}
+
+.search-form {
+	margin-top: 16px;
+}
+
 #listings {
 	overflow: scroll;
 }

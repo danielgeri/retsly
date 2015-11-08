@@ -26,13 +26,13 @@ block content
 							a.th(data-reveal-id="myModal")
 								img(ng-src='{{listing.media[0].url}}')
 						div.small-8.columns
-							p(ng-bind='listing.id')
+							p(ng-bind='listing.address')
 							p
 								//- ROI = (rent - monthly taxes) * 12 / purchase price + capex
 								//- capex = ((-.25 * year built) + 530) * sq ft)
 								//- span(ng-bind='vm.calculateRent(listing,listing.city,listing.state, listing.address)')
 								span(ng-bind='vm.calculateROI(listing,listing.taxAnnual,listing.price,listing.yearBuilt,listing.squareFootage,listing.estimatedRent)')
-								span(ng-bind='listing.ROI')
+								| &nbsp;|&nbsp;
 								span(ng-bind='listing.price | currency')
 							p
 								| Bed:
@@ -61,11 +61,11 @@ block content
 				h5 ROI: 
 					span(ng-bind='vm.propertyListing.ROI')
 				label Price
-					input(type='text',ng-bind='{{vm.propertyListing.price}}',ng-model='vm.propertyListing.price',ng-change='vm.recalculateROI()')
+					input(type='text',ng-bind='{{vm.alteredPrice}}',ng-model='vm.alteredPrice',ng-change='vm.recalculateROI()')
 				label Rent
 					input(type='text',value='4000',ng-model='vm.propertyListing.estimatedRent',ng-change='vm.recalculateROI()')
 				label Renovation
-					input(type='text',ng-bind='{{vm.propertyListing.capEx}}',ng-model='vm.propertyListing.capEx',ng-change='vm.recalculateROI()')
+					input(type='text',ng-bind='{{vm.alteredCapEx}}',ng-model='vm.alteredCapEx',ng-change='vm.recalculateROI()')
 				p Bedrooms: 
 					span(ng-bind='vm.propertyListing.bedrooms')
 				p Bathrooms: 
