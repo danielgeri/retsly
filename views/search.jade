@@ -1,0 +1,49 @@
+extends layout
+
+block content
+	div.row.full-width
+		div.medium-8.columns.no-padding
+			div.map-wrapper
+				div#map(ng-init='vm.getListings()')
+					| This is the map
+		div.medium-4.columns.no-padding
+			div.listing-title
+				h4 Listings in 
+					span(ng-bind='vm.getParam()')
+				nav.top-bar(data-topbar,role="navigation")
+					section.top-bar-section
+						ul.left
+							li 
+								a Gains
+							li 
+								a Fire
+							li 
+								a Cheap
+			ul#listings
+				li(ng-repeat='listing in vm.listings')
+					div.row
+						div.small-4.columns
+							a.th
+								img(ng-src='{{listing.media[0].url}}')
+						div.small-8.columns
+							p(ng-bind='listing.address')
+							p
+								//- ROI = (rent - monthly taxes) * 12 / purchase price + capex
+								//- capex = ((-.25 * year built) + 530) * sq ft)
+								span(ng-bind='vm.ROI()')
+								span(ng-bind='listing.price | currency')
+							p
+								| Bed:
+								span(ng-bind='listing.bedrooms')
+								| &nbsp;Bath:
+								span(ng-bind='listing.baths')
+								| &nbsp;Year Built:
+								span(ng-bind='listing.yearBuilt')
+								| &nbsp;Sq Ft:
+								span(ng-bind='listing.squareFootage')
+							p
+								| List Date:
+								span(ng-bind='vm.readableDate(listing.listDate)')
+								| &nbsp;|&nbsp;
+								span(ng-bind='vm.daysFromListing(listing.listDate)')
+								| &nbsp;Days on Market

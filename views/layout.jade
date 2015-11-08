@@ -1,0 +1,24 @@
+doctype html
+html.no-js(ng-app='retslyApp',lang="en")
+	head
+		meta(charset='utf-8')
+		meta(name='viewport', content='width=device-width, initial-scale=1.0')
+		title= title
+		link(rel='stylesheet', href='/bower/foundation/css/foundation.min.css')
+		link(rel='stylesheet', href='/stylesheets/style.css')
+	body(ng-controller='retslyController as vm')
+		nav.top-bar(data-topbar,role="navigation")
+			ul.title-area
+				li.name
+					h1
+						a(href="#") #{title}
+
+		block content
+		script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqrpOxbkpxsq7SG7D6eCxHPTx2fbBXKP0")
+		script(src='/bower/foundation/js/vendor/modernizr.js')
+		script(src='/bower/angular/angular.min.js')
+		script(src='/bower/foundation/js/vendor/jquery.js')
+		script(src='/bower/foundation/js/foundation.min.js')
+		script(src='/javascripts/app.js')
+		script(type='text/javascipt').
+			$(document).foundation();

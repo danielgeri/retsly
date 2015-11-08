@@ -1,0 +1,15 @@
+#listings {
+	overflow: scroll;
+}
+
+.full-width {
+	max-width: 100%;
+}
+
+.no-padding {
+	padding: 0;
+}
+
+.listing-thumb {
+	width: 110px;
+}
