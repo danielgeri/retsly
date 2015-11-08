@@ -14,11 +14,11 @@ block content
 					section.top-bar-section
 						ul.left
 							li 
-								a(ng-click="vm.order('-ROI')") Gains
+								a(ng-click="vm.order('-ROI')",ng-class="{active: vm.predicate == '-ROI'}") Gains
 							li 
-								a(ng-click="vm.order('-listDate')") Fire
+								a(ng-click="vm.order('-listDate')",ng-class="{active: vm.predicate == '-listDate'}") Fire
 							li 
-								a(ng-click="vm.order('price')") Cheap
+								a(ng-click="vm.order('price')",ng-class="{active: vm.predicate == 'price'}") Cheap
 			ul.no-padding.no-margin#listings
 				li(ng-repeat="listing in vm.listings | orderBy:vm.predicate" )
 					div.row(ng-click='vm.alertMessage(listing.id)')
@@ -93,5 +93,5 @@ block content
 					span(ng-bind='vm.propertyListing.yearBuilt')
 					| &nbsp;|&nbsp;Sq Ft:
 					span(ng-bind='vm.propertyListing.squareFootage')
-				button.button.agent-button(ng-click='vm.callAgent()') Call Agent
+				button.button.agent-button(ng-click='vm.callAgent()') Text Agent
 			a.close-reveal-modal(aria-label="Close") &#215;

@@ -25,6 +25,8 @@
 		// $locationProvider.html5mode(true);
 
 		vm.getListings = function() {
+			var param = vm.getParamValue('location');
+			var url = 'https://rets.io/api/v1/test_sf/listings?access_token=886502f6937e0c9db3349beb08f110e3';
 			var mapdiv = document.getElementById("map");
 			var listingsul = document.getElementById("listings");
 			mapdiv.style.height = ($window.innerHeight - 50) + 'px';
@@ -33,13 +35,9 @@
 				center: {lat: 37.7833, lng: -122.4167},
 				zoom: 12
 			});
-			var mapdiv = document.getElementById("map");
-			mapdiv.style.width = $window.innerHeight;
 			//pull in homes only status active
-			var url = 'https://rets.io/api/v1/test_sf/listings?access_token=886502f6937e0c9db3349beb08f110e3';
-			var param = vm.getParamValue('location');
-			url += '&zipCode=' + param;
-			url += '&limit=50';
+			url += '&near=' + param;
+			url += '&limit=100';
 			url += '&status=Active';
 			$http.get(url
 			).success(function(data) {
@@ -47,7 +45,6 @@
 		      vm.listings = vm.addROIField(data.bundle);
 					vm.plotListingsOnMap(map,vm.listings);
 		    }, 0);
-				
 			}).error(function(error){
 				vm.alertMessage = 'There was an error retreiving data from retsly:' + error
 				$scope.$apply();
@@ -58,20 +55,6 @@
       vm.predicate = predicate;
     };
 
-    vm.getOneListing = function(listingId) {
-			var listingURL = 'https://rets.io/api/v1/test_sf/listings/' + listingId + '?access_token=886502f6937e0c9db3349beb08f110e3';
-			$http.get(listingURL
-			).success(function(data) {
-				$timeout(function() {
-		      console.log(data);
-		    }, 0);
-				// vm.listings = vm.addROIField(data.bundle);
-			}).error(function(error){
-				vm.alertMessage = 'There was an error retreiving data from retsly:' + error
-				$scope.$apply();
-			});
-		}
-
 		vm.addROIField = function(listings) {
 			for (var i = listings.length - 1; i >= 0; i--) {
 				listings[i].ROI = 'ROIBABY!';
@@ -81,7 +64,7 @@
 		}
 
 		vm.plotListingsOnMap = function(map,listings) {
-
+			var bounds = new google.maps.LatLngBounds();
 			for (var i = listings.length - 1; i >= 0; i--) {
 				var myLatLng = {
 					lat: parseFloat(listings[i].coordinates[1]),
@@ -93,8 +76,9 @@
 					title:"Hello World!"
 				});
 				marker.setMap(map);
+				bounds.extend(marker.getPosition());
 			};
-
+	    map.fitBounds(bounds);
 		}
 
 		vm.getParamValue = function(variable) {
@@ -198,7 +182,7 @@
 		}
 
 		vm.callAgent = function () {
-			var agentURL = '/call';
+			var agentURL = '/call-agent';
 			$http({
 				method: 'GET',
 				url: agentURL
