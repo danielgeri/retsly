@@ -30,7 +30,7 @@ block content
 							p
 								//- ROI = (rent - monthly taxes) * 12 / purchase price + capex
 								//- capex = ((-.25 * year built) + 530) * sq ft)
-								span(ng-bind='vm.ROI()')
+								span(ng-bind='vm.ROI(listing.taxAnnual,listing.price,listing.yearBuilt,listing.squareFootage)')
 								span(ng-bind='listing.price | currency')
 							p
 								| Bed:

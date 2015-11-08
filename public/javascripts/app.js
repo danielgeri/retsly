@@ -74,7 +74,16 @@
 
 		vm.readableDate = function(dateString) {
 			var d = new Date(dateString);
-			return (d.getMonth() + 1) + '/' d.getDate() + '/' + d.getFullYear();
+			var dM = d.getMonth() + 1;
+			var date = dM + '/' + d.getDate() + '/' + d.getFullYear();
+			return date;
+		}
+
+		vm.daysFromListing = function(dateString) {
+			var d = new Date(dateString);
+			var today = new Date();
+			var days = (((((today - d) / 1000) / 60) / 60) / 24);
+			return Math.round(days)
 		}
 
 		vm.initMap = function() {
@@ -82,6 +91,14 @@
 				center: {lat: 37.7833, lng: -122.4167},
 				zoom: 8
 			});
+		}
+
+		vm.ROI = function(tax, listingPrice, yearBuilt, sqFt) {
+			var capEx = ((-.25 * yearBuilt) + 530) * sqFt; 
+			var NOI = (3000 * 12) + tax;
+			var homeCost = listingPrice + capEx;
+			var ROI = NOI / homeCost;
+			return (Math.ceil(ROI * 100) / 100) + '%';
 		}
 
 	}]);
