@@ -10,15 +10,21 @@ block content
 			div.listing-title
 				h4 Properties in 
 					span(ng-bind="vm.getParamValue('location')")
-				nav.top-bar.nav-sidebar(data-topbar,role="navigation")
+				nav.top-bar.nav-sidebar.hide-for-small-only(data-topbar,role="navigation")
 					section.top-bar-section
 						ul.left
 							li 
-								a(ng-click="vm.order('-ROI')",ng-class="{active: vm.predicate == '-ROI'}") Gains
+								a(ng-click="vm.order('-ROI')",ng-class="{active: vm.predicate == '-ROI'}")
+									span.my-icon.icon-dumbbell
+									span.last-min-adj Gains
 							li 
-								a(ng-click="vm.order('-listDate')",ng-class="{active: vm.predicate == '-listDate'}") Fire
+								a(ng-click="vm.order('-listDate')",ng-class="{active: vm.predicate == '-listDate'}")
+									span.my-icon.icon-fire
+									span.last-min-adj Fire
 							li 
-								a(ng-click="vm.order('price')",ng-class="{active: vm.predicate == 'price'}") Cheap
+								a(ng-click="vm.order('price')",ng-class="{active: vm.predicate == 'price'}") 
+									span.my-icon.icon-dollar
+									span.last-min-adj Cheap
 			ul.no-padding.no-margin#listings
 				li(ng-repeat="listing in vm.listings | orderBy:vm.predicate" )
 					div.row(ng-click='vm.alertMessage(listing.id)')

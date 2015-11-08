@@ -155,3 +155,42 @@ body, input, h4, a, li, ul, nav {
 	background-color: #074e68;
 	color:white;
 }
+
+.my-icon {
+	width: 32px;
+  height: 32px;
+  display: inline-block;
+  margin-top: 6px;
+  /* background-color: yellow; */
+  margin-left: -8px;
+  
+}
+
+a .icon-dumbbell {
+	background-image: url('/images/icon-dumbbell.png')
+}
+
+a .icon-fire {
+	background-image: url('/images/icon-fire.png')
+}
+
+a .icon-dollar {
+	background-image: url('/images/icon-dollar.png')
+}
+
+a.active .icon-dumbbell,a .icon-dumbbell:hover {
+	background-image: url('/images/icon-dumbbell-white.png')
+}
+
+a.active .icon-fire,a .icon-fire:hover {
+	background-image: url('/images/icon-fire-white.png')
+}
+
+a.active .icon-dollar,a .icon-dollar:hover {
+	background-image: url('/images/icon-dollar-white.png')
+}
+
+.last-min-adj {
+	    position: relative;
+    top: -10px;
+}
