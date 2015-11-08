@@ -58,6 +58,21 @@ block content
 					li(ng-repeat='pic in vm.propertyListing.media')
 						img(ng-src='{{pic.url}}')
 			div.small-5.columns
-				p(ng-bind='vm.propertyListing.ROI')
-
+				h5 ROI: 
+					span(ng-bind='vm.propertyListing.ROI')
+				label Price
+					input(type='text',ng-bind='{{vm.propertyListing.price}}',ng-model='vm.propertyListing.price',ng-change='vm.recalculateROI()')
+				label Rent
+					input(type='text',value='4000',ng-model='vm.propertyListing.estimatedRent',ng-change='vm.recalculateROI()')
+				label Renovation
+					input(type='text',ng-bind='{{vm.propertyListing.capEx}}',ng-model='vm.propertyListing.capEx',ng-change='vm.recalculateROI()')
+				p Bedrooms: 
+					span(ng-bind='vm.propertyListing.bedrooms')
+				p Bathrooms: 
+					span(ng-bind='vm.propertyListing.baths')
+				p Year Built
+					span(ng-bind='vm.propertyListing.yearBuilt')
+				p Sq Ft:
+					span(ng-bind='vm.propertyListing.squareFootage')
+				button.button.agent-button(ng-click='vm.callAgent()') Call Agent
 			a.close-reveal-modal(aria-label="Close") &#215;
