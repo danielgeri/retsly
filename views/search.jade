@@ -14,23 +14,25 @@ block content
 					section.top-bar-section
 						ul.left
 							li 
-								a Gains
+								a(ng-click="vm.order('-ROI')") Gains
 							li 
-								a Fire
+								a(ng-click="vm.order('-listDate')") Fire
 							li 
-								a Cheap
+								a(ng-click="vm.order('price')") Cheap
 			ul#listings
-				li(ng-repeat='listing in vm.listings')
-					div.row
+				li(ng-repeat="listing in vm.listings | orderBy:vm.predicate" )
+					div.row(ng-click='vm.alertMessage(listing.id)')
 						div.small-4.columns
-							a.th
+							a.th(data-reveal-id="myModal")
 								img(ng-src='{{listing.media[0].url}}')
 						div.small-8.columns
-							p(ng-bind='listing.address')
+							p(ng-bind='listing.id')
 							p
 								//- ROI = (rent - monthly taxes) * 12 / purchase price + capex
 								//- capex = ((-.25 * year built) + 530) * sq ft)
-								span(ng-bind='vm.ROI(listing.taxAnnual,listing.price,listing.yearBuilt,listing.squareFootage)')
+								//- span(ng-bind='vm.calculateRent(listing,listing.city,listing.state, listing.address)')
+								span(ng-bind='vm.calculateROI(listing,listing.taxAnnual,listing.price,listing.yearBuilt,listing.squareFootage,listing.estimatedRent)')
+								span(ng-bind='listing.ROI')
 								span(ng-bind='listing.price | currency')
 							p
 								| Bed:
@@ -47,3 +49,15 @@ block content
 								| &nbsp;|&nbsp;
 								span(ng-bind='vm.daysFromListing(listing.listDate)')
 								| &nbsp;Days on Market
+
+	div#myModal.reveal-modal(data-reveal,aria-labelledby="modalTitle",aria-hidden="true",role="dialog")
+		h4#modalTitle(ng-bind='vm.propertyListing.address')
+		div.row
+			div.small-7.columns 
+				ul(data-orbit)
+					li(ng-repeat='pic in vm.propertyListing.media')
+						img(ng-src='{{pic.url}}')
+			div.small-5.columns
+				p(ng-bind='vm.propertyListing.ROI')
+
+			a.close-reveal-modal(aria-label="Close") &#215;

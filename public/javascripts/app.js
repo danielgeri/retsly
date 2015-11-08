@@ -7,7 +7,8 @@
 		'$location', 
 		'$animate',
 		'$window',
-		function($scope,$http,$location,$animate,$window) {
+		'$timeout',
+		function($scope,$http,$location,$animate,$window,$timeout) {
 		
 		var vm = this;
 		var id = 'o9gYmb2fJ5OgyCPRcVJJ';
@@ -15,6 +16,10 @@
 		var access_token = '886502f6937e0c9db3349beb08f110e3';
 		vm.test = 'test';
 		vm.listings = '';
+		vm.predicate = '-ROI';
+		vm.propertyListing = '';
+		//individual listing data
+
 		// $locationProvider.html5mode(true);
 
 		vm.getListings = function() {
@@ -30,19 +35,44 @@
 			mapdiv.style.width = $window.innerHeight;
 			//pull in homes only status active
 			var url = 'https://rets.io/api/v1/test_sf/listings?access_token=886502f6937e0c9db3349beb08f110e3';
-			var param = vm.getParam();
+			var param = vm.getParamValue('location');
 			url += '&zipCode=' + param;
-			url += '&limit=100';
+			url += '&limit=50';
 			url += '&status=Active';
 			$http.get(url
 			).success(function(data) {
-				console.log(data);
-				vm.listings = data.bundle;
+				vm.listings = vm.addROIField(data.bundle);
 				vm.plotListingsOnMap(map,vm.listings);
 			}).error(function(error){
 				vm.alertMessage = 'There was an error retreiving data from retsly:' + error
 				$scope.$apply();
 			});
+		}
+
+		vm.order = function(predicate) {
+      vm.predicate = predicate;
+    };
+
+    vm.getOneListing = function(listingId) {
+			var listingURL = 'https://rets.io/api/v1/test_sf/listings/' + listingId + '?access_token=886502f6937e0c9db3349beb08f110e3';
+			$http.get(listingURL
+			).success(function(data) {
+				$timeout(function() {
+		      console.log(data);
+		    }, 0);
+				// vm.listings = vm.addROIField(data.bundle);
+			}).error(function(error){
+				vm.alertMessage = 'There was an error retreiving data from retsly:' + error
+				$scope.$apply();
+			});
+		}
+
+		vm.addROIField = function(listings) {
+			for (var i = listings.length - 1; i >= 0; i--) {
+				listings[i].ROI = 'ROIBABY!';
+				listings[i].estimatedRent = 4000;
+			};
+			return listings;
 		}
 
 		vm.plotListingsOnMap = function(map,listings) {
@@ -62,14 +92,15 @@
 
 		}
 
-		vm.getParam = function() {
-			var paramValue = '';
-			var locationURL = $location.$$absUrl;
-			console.log(locationURL);
-			if(locationURL.indexOf('location') > -1){    
-        paramValue= locationURL.split('=')[1];
-	    }
-	    return paramValue;
+		vm.getParamValue = function(variable) {
+			var query = window.location.search.substring(1);
+			var vars = query.split("&");
+			for (var i=0;i<vars.length;i++) {
+				var pair = vars[i].split("=");
+				if (pair[0] == variable) {
+					return pair[1];
+				}
+			}
 		}
 
 		vm.readableDate = function(dateString) {
@@ -93,12 +124,66 @@
 			});
 		}
 
-		vm.ROI = function(tax, listingPrice, yearBuilt, sqFt) {
-			var capEx = ((-.25 * yearBuilt) + 530) * sqFt; 
-			var NOI = (3000 * 12) + tax;
+		vm.calculateROI = function(listing, tax, listingPrice, yearBuilt, sqFt, rent) {
+			// var rent = vm.calculateRent(city, state, address);
+			var capEx = ((-.25 * yearBuilt) + 530) * sqFt;
+			var NOI = (rent * 12) + tax;
 			var homeCost = listingPrice + capEx;
-			var ROI = NOI / homeCost;
-			return (Math.ceil(ROI * 100) / 100) + '%';
+			var returnOnI = NOI / homeCost;
+			listing.ROI = (Math.ceil(returnOnI * 100) / 100);
+		}
+
+		vm.calculateROI2 = function(tax, listingPrice, yearBuilt, sqFt, rent) {
+			// var rent = vm.calculateRent(city, state, address);
+			var capEx = ((-.25 * yearBuilt) + 530) * sqFt;
+			var NOI = (rent * 12) + tax;
+			var homeCost = listingPrice + capEx;
+			var returnOnI = (Math.ceil(NOI / homeCost * 100) / 100);
+			console.log(returnOnI);
+			return returnOnI;
+		}
+
+		vm.calculateRent = function(listing, city, state, address) {
+			var zillowAPIURL = 'http://www.zillow.com/webservice/GetSearchResults.htm?zws-id=X1-ZWz1a08n4bl7nv_anh8k&citystatezip=' + city + ',' + state + '&address=' + address;
+			console.log(zillowAPIURL);
+			$http.get(zillowAPIURL
+			).success(function(data) {
+				$timeout(function() {
+		      console.log(data);
+		    }, 0);
+			}).error(function(error){
+				vm.alertMessage = 'There was an error retreiving data from zillow:' + error
+			});
+		}
+
+
+
+		vm.alertMessage = function(id) {
+			var listingUrl = 'https://rets.io/api/v1/test_sf/listings/' + id + '?access_token=886502f6937e0c9db3349beb08f110e3'
+		
+			$http({
+				method: 'GET',
+				url: listingUrl
+			}).then(function successCallback(response) {
+				vm.propertyListing = response.data.bundle;
+				console.log(vm.propertyListing.taxAnnual);
+
+				var ROIplaceholder = vm.calculateROI2(
+					vm.propertyListing.taxAnnual,
+					vm.propertyListing.price,
+					vm.propertyListing.yearBuilt,
+					vm.propertyListing.squareFootage,
+					vm.propertyListing.estimatedRent
+				);
+				vm.propertyListing.ROI = ROIplaceholder;
+				$('#myModal').foundation('reveal', 'open');
+				$timeout(function() {
+		      $(document).foundation('orbit', 'reflow');
+		    }, 1000);
+			}, function errorCallback(response) {
+				// called asynchronously if an error occurs
+				// or server returns response with an error status.
+			});
 		}
 
 	}]);
