@@ -26,7 +26,7 @@
 
 		vm.getListings = function() {
 			var param = vm.getParamValue('location');
-			var url = 'https://rets.io/api/v1/test_sf/listings?access_token=886502f6937e0c9db3349beb08f110e3';
+			var url = 'https://rets.io/api/v1/test_sf/listings?access_token=a7a8875b6cfaabeb96bfeea160f083ff';
 			var mapdiv = document.getElementById("map");
 			var listingsul = document.getElementById("listings");
 			mapdiv.style.height = ($window.innerHeight - 50) + 'px';
