@@ -1,7 +1,7 @@
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
-var mongoose = require('mongoose');
+// var mongoose = require('mongoose');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -10,7 +10,7 @@ var config = require('./config');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
-mongoose.connect(config.mongoURI);
+// mongoose.connect(config.mongoURI);
 
 var app = express();
 
